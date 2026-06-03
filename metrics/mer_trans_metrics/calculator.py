@@ -86,10 +86,19 @@ class MerTrans:
 
         return RobertaSenseFacilMetric(**{self.roberta_sense_facil.model.config.id2label[i]: probs[i] for i in range(len(probs))})
 
-    def get_all_metrics(self, sources: list[str], references: list[str], predictions: list[str]):
+    def get_all_metrics_origin(self, sources: list[str], references: list[str], predictions: list[str]):
+        return MerTransMetrics(
+            bleu=self.get_bleu_metric(sources, predictions),
+            sari=self.get_sari_metric(sources, references, predictions),
+            bertscore=self.get_bert_score(sources, predictions),
+            meaning_bert=self.get_meaning_bert_score(sources, predictions),
+            roberta_sense_facil=self.get_roberta_sense_facil_metric(sources, predictions)
+        )
+    
+    def get_all_metrics_gold(self, sources: list[str], references: list[str], predictions: list[str]):
         return MerTransMetrics(
             bleu=self.get_bleu_metric(references, predictions),
-            sari=self.get_sari_metric(sources, references, predictions),
+            sari=self.get_sari_metric(sources, references, references),
             bertscore=self.get_bert_score(references, predictions),
             meaning_bert=self.get_meaning_bert_score(references, predictions),
             roberta_sense_facil=self.get_roberta_sense_facil_metric(references, predictions)

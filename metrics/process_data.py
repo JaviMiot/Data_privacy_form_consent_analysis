@@ -20,25 +20,25 @@ class InputColumn(StrEnum):
 
 class SummaryColumn(StrEnum):
     DOCUMENT_ID = "document_id"
-    BLEU = "bleu"
-    SARI = "sari"
-    BERTSCORE_PRECISION = "bertscore_precision"
-    BERTSCORE_RECALL = "bertscore_recall"
-    BERTSCORE_F1 = "bertscore_f1"
-    MEANING_BERT = "meaning_bert"
-    COS_TFIDF = "cos_tfidf"
-    COS_EMBED = "cos_embed"
-    COS_AVG = "cos_avg"
-    ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE = "roberta_sense_facil_does_not_preserve"
-    ROBERTA_SENSE_FACIL_PRESERVES_MEANING = "roberta_sense_facil_preserves_meaning"
     ORIG_BLEU = "orig_bleu"
     ORIG_SARI = "orig_sari"
     ORIG_BERTSCORE_PRECISION = "orig_bertscore_precision"
     ORIG_BERTSCORE_RECALL = "orig_bertscore_recall"
     ORIG_BERTSCORE_F1 = "orig_bertscore_f1"
     ORIG_MEANING_BERT = "orig_meaning_bert"
+    ORIG_COS_TFIDF = "orig_cos_tfidf"
+    ORIG_COS_EMBED = "orig_cos_embed"
+    ORIG_COS_AVG = "orig_cos_avg"
     ORIG_ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE = "orig_roberta_sense_facil_does_not_preserve"
     ORIG_ROBERTA_SENSE_FACIL_PRESERVES_MEANING = "orig_roberta_sense_facil_preserves_meaning"
+    GOLD_BLEU = "gold_bleu"
+    GOLD_SARI = "gold_sari"
+    GOLD_BERTSCORE_PRECISION = "gold_bertscore_precision"
+    GOLD_BERTSCORE_RECALL = "gold_bertscore_recall"
+    GOLD_BERTSCORE_F1 = "gold_bertscore_f1"
+    GOLD_MEANING_BERT = "gold_meaning_bert"
+    GOLD_ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE = "gold_roberta_sense_facil_does_not_preserve"
+    GOLD_ROBERTA_SENSE_FACIL_PRESERVES_MEANING = "gold_roberta_sense_facil_preserves_meaning"
 
 
 
@@ -79,12 +79,12 @@ class MetricsProcessor:
             # Fallback: Usar fuentes como referencias para medir preservación
             references = sources
 
-        pred_metrics = self.mer_trans.get_all_metrics(sources, references, predictions)
-        orig_metrics = self.mer_trans.get_all_metrics(sources, references, references)
+        orig_metrics = self.mer_trans.get_all_metrics_origin(sources, references, predictions)
+        gold_metrics = self.mer_trans.get_all_metrics_gold(sources, references, predictions)
         clears_metrics = self.clears.get_all_metrics(predictions, sources)
 
         return {
-            "pred": pred_metrics,
+            "gold": gold_metrics,
             "orig": orig_metrics,
             "clears": clears_metrics
         }
@@ -125,31 +125,31 @@ class MetricsProcessor:
         rows = []
         for document_id in metrics_by_document.index:
             metrics = metrics_by_document[document_id]
-            pred_metrics = metrics["pred"]
-            orig_metrics = metrics["orig"]
+            origin_metrics = metrics["orig"]
+            gold_metrics = metrics["gold"]
             readability = readability_by_document.get(document_id)
 
             row = {
                 SummaryColumn.DOCUMENT_ID: document_id,
-                SummaryColumn.BLEU: round(pred_metrics.bleu.bleu, 4),
-                SummaryColumn.SARI: round(pred_metrics.sari.sari, 4),
-                SummaryColumn.BERTSCORE_PRECISION: round(pred_metrics.bertscore.mean_precision, 4),
-                SummaryColumn.BERTSCORE_RECALL: round(pred_metrics.bertscore.mean_recall, 4),
-                SummaryColumn.BERTSCORE_F1: round(pred_metrics.bertscore.mean_f1, 4),
-                SummaryColumn.MEANING_BERT: round(pred_metrics.meaning_bert.mean_score, 4),
-                SummaryColumn.COS_TFIDF: round(metrics["clears"].tfidf.mean_score, 4),
-                SummaryColumn.COS_EMBED: round(metrics["clears"].embedding.mean_score, 4),
-                SummaryColumn.COS_AVG: round(metrics["clears"].cosine_avg, 4),
-                SummaryColumn.ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE: round(pred_metrics.roberta_sense_facil.does_not_preserve, 4),
-                SummaryColumn.ROBERTA_SENSE_FACIL_PRESERVES_MEANING: round(pred_metrics.roberta_sense_facil.preserves_meaning, 4),
-                SummaryColumn.ORIG_BLEU: round(orig_metrics.bleu.bleu, 4),
-                SummaryColumn.ORIG_SARI: round(orig_metrics.sari.sari, 4),
-                SummaryColumn.ORIG_BERTSCORE_PRECISION: round(orig_metrics.bertscore.mean_precision, 4),
-                SummaryColumn.ORIG_BERTSCORE_RECALL: round(orig_metrics.bertscore.mean_recall, 4),
-                SummaryColumn.ORIG_BERTSCORE_F1: round(orig_metrics.bertscore.mean_f1, 4),
-                SummaryColumn.ORIG_MEANING_BERT: round(orig_metrics.meaning_bert.mean_score, 4),
-                SummaryColumn.ORIG_ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE: round(orig_metrics.roberta_sense_facil.does_not_preserve, 4),
-                SummaryColumn.ORIG_ROBERTA_SENSE_FACIL_PRESERVES_MEANING: round(orig_metrics.roberta_sense_facil.preserves_meaning, 4),
+                SummaryColumn.ORIG_BLEU: round(origin_metrics.bleu.bleu, 4),
+                SummaryColumn.ORIG_SARI: round(origin_metrics.sari.sari, 4),
+                SummaryColumn.ORIG_BERTSCORE_PRECISION: round(origin_metrics.bertscore.mean_precision, 4),
+                SummaryColumn.ORIG_BERTSCORE_RECALL: round(origin_metrics.bertscore.mean_recall, 4),
+                SummaryColumn.ORIG_BERTSCORE_F1: round(origin_metrics.bertscore.mean_f1, 4),
+                SummaryColumn.ORIG_MEANING_BERT: round(origin_metrics.meaning_bert.mean_score, 4),
+                SummaryColumn.ORIG_COS_TFIDF: round(metrics["clears"].tfidf.mean_score, 4),
+                SummaryColumn.ORIG_COS_EMBED: round(metrics["clears"].embedding.mean_score, 4),
+                SummaryColumn.ORIG_COS_AVG: round(metrics["clears"].cosine_avg, 4),
+                SummaryColumn.ORIG_ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE: round(origin_metrics.roberta_sense_facil.does_not_preserve, 4),
+                SummaryColumn.ORIG_ROBERTA_SENSE_FACIL_PRESERVES_MEANING: round(origin_metrics.roberta_sense_facil.preserves_meaning, 4),
+                SummaryColumn.GOLD_BLEU: round(gold_metrics.bleu.bleu, 4),
+                SummaryColumn.GOLD_SARI: round(gold_metrics.sari.sari, 4),
+                SummaryColumn.GOLD_BERTSCORE_PRECISION: round(gold_metrics.bertscore.mean_precision, 4),
+                SummaryColumn.GOLD_BERTSCORE_RECALL: round(gold_metrics.bertscore.mean_recall, 4),
+                SummaryColumn.GOLD_BERTSCORE_F1: round(gold_metrics.bertscore.mean_f1, 4),
+                SummaryColumn.GOLD_MEANING_BERT: round(gold_metrics.meaning_bert.mean_score, 4),
+                SummaryColumn.GOLD_ROBERTA_SENSE_FACIL_DOES_NOT_PRESERVE: round(gold_metrics.roberta_sense_facil.does_not_preserve, 4),
+                SummaryColumn.GOLD_ROBERTA_SENSE_FACIL_PRESERVES_MEANING: round(gold_metrics.roberta_sense_facil.preserves_meaning, 4),
             }
 
             if readability:
