@@ -4,4 +4,21 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "bert-score>=0.3.13",
+    "click>=8.4.1",
+    "evaluate>=0.4.6",
+    "nltk>=3.9.4",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.3",
+    "pylabeador>=0.8.2",
+    "sacrebleu>=2.6.0",
+    "sacremoses>=0.1.1",
+    "scikit-learn>=1.9.0",
+    "seaborn>=0.13.2",
+    "sentence-transformers==5.3.0",
+    "silabeador>=1.2.2.post1",
+    "spacy==3.8.11",
+    "textstat>=0.7.13",
+    "torch>=2.12.0",
+]
