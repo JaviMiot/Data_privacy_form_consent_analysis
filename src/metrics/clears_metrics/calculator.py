@@ -3,7 +3,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
-from metrics.clears_metrics.models import CosineTfIdfMetric, CosineEmbeddingMetric, ClearsMetrics
+from src.metrics.clears_metrics.models import CosineTfIdfMetric, CosineEmbeddingMetric, ClearsMetrics
 
 class ClearsCalculator:
     def __init__(self, model_name: str = "paraphrase-multilingual-MiniLM-L12-v2"):

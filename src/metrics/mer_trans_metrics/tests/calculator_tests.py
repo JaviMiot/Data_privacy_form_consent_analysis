@@ -1,6 +1,6 @@
 import pandas as pd
 
-from metrics.mer_trans_metrics.calculator import MerTrans
+from src.metrics.mer_trans_metrics.calculator import MerTrans
 
 
 class TestMerTransBLEU:

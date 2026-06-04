@@ -6,7 +6,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import typing
 
-from metrics.mer_trans_metrics.models import BleuMetric, SariMetric, BertScoreMetric, MeaningBertMetric, MerTransMetrics, RobertaSenseFacilMetric
+from src.metrics.mer_trans_metrics.models import BleuMetric, SariMetric, BertScoreMetric, MeaningBertMetric, MerTransMetrics, RobertaSenseFacilMetric
 
 nltk.download('punkt')
 nltk.download('punkt_tab')

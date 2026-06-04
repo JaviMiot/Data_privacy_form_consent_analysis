@@ -13,7 +13,7 @@ resolution-markers = [
 [[package]]
 name = "02-legal-analisys"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "bert-score" },
     { name = "click" },

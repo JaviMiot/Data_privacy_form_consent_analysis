@@ -4,10 +4,10 @@ import pandas as pd
 import openpyxl
 import openpyxl.utils
 
-from metrics.mer_trans_metrics.calculator import MerTrans
-from metrics.mer_trans_metrics.models import MerTransMetrics
-from metrics.clears_metrics.calculator import ClearsCalculator
-from metrics.readability_complexity.calculator import index_calculator
+from src.metrics.mer_trans_metrics.calculator import MerTrans
+from src.metrics.mer_trans_metrics.models import MerTransMetrics
+from src.metrics.clears_metrics.calculator import ClearsCalculator
+from src.metrics.readability_complexity.calculator import index_calculator
 
 
 class InputColumn(StrEnum):
